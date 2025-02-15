@@ -188,10 +188,36 @@ td button:nth-child(3) {
   width: 15%;
 }
 
-footer {
-  text-align: center;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 1000px;
+@media (max-width: 480px) {
+  body {
+    font-size: 0.6rem;
+  }
+  .input-section input {
+    font-size: 0.5rem;
+    margin-left: 5px;
+    width: 50%;
+    padding: 5px;
+  }
+
+  .filter-todos,
+  #delete-all-button,
+  #add-button {
+    font-size: 0.5rem;
+  }
+
+  #edit-button {
+    font-size: 0.4rem;
+  }
+
+  tbody td button {
+    padding: 4px 8px;
+    margin: 2px 5px;
+    font-size: 0.6rem;
+  }
+
+  td button:nth-child(2),
+  td button:nth-child(3) {
+    width: 46.58px;
+  }
 }
+

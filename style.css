@@ -80,15 +80,6 @@ h2 {
   color: gray;
 }
 
-input[type="date"] {
-  position: relative;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 1;
-  cursor: pointer;
-}
-
 .input-section input:focus {
   outline: none;
   border-width: 2px;

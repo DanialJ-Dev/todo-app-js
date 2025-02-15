@@ -95,7 +95,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 button {
-  color: #000000
+  color: #000000;
   cursor: pointer;
   background-color: var(--color-primary);
   padding: 10px 15px;
@@ -108,9 +108,14 @@ button:hover {
 }
 
 .todo-operators {
+  color: red;
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+.filter-todos {
+  color: #000000;
 }
 
 #delete-all-button {
@@ -154,11 +159,13 @@ tbody td button {
 
 tbody td button:nth-child(1) {
   background-color: var(--color-warning);
+  color: #000000;
 }
 
 td button:nth-child(2) {
   background-color: var(--color-success);
   width: 50px;
+  color: #000000;
 }
 
 td button:nth-child(3) {
@@ -191,10 +198,12 @@ td button:nth-child(3) {
 }
 
 #edit-button {
+  color: #000000;
   display: none;
   width: 15%;
 }
-#add-button{
+#add-button {
+  color: #000000;
   width: 15%;
 }
 
@@ -230,4 +239,3 @@ td button:nth-child(3) {
     width: 46.58px;
   }
 }
-

@@ -86,6 +86,7 @@ h2 {
 }
 
 button {
+  color: #000000
   cursor: pointer;
   background-color: var(--color-primary);
   padding: 10px 15px;

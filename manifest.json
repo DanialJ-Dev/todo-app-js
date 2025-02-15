@@ -2,7 +2,7 @@
     "name": "Todo App",
     "short_name": "Todo",
     "description": "This To-Do List app helps users manage tasks with features like adding, editing, and deleting tasks.",
-    "start_url": "/",
+    "start_url": "/todo-app-js/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#f9d72f",

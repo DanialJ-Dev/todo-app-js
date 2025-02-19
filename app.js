@@ -37,16 +37,16 @@ const displayTodos = (filteredTodos = todos) => {
   tBody.innerHTML = "";
   filteredTodos.forEach((todo) => {
     tBody.innerHTML += `<tr>
-  <td>
+  <td class="${todo.completed ? "completed-task" : ""}">
   ${todo.task}
   </td>
-  <td>
+  <td class="${todo.completed ? "completed-task" : ""}">
   ${todo.date || "-"}
   </td>
-  <td>
+  <td class="${todo.completed ? "completed-task" : ""}">
   ${todo.completed ? "انجام شده" : "در حال انجام"}
   </td>
-  <td>
+  <td class="${todo.completed ? "completed-task" : ""}">
   <button onclick="editHandler('${todo.id}')">ویرایش</button>
   <button onclick="toggleStatus('${todo.id}')">${
       todo.completed ? "ناتمام" : "تمام"

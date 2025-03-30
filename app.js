@@ -5,6 +5,7 @@ const editButton = document.getElementById("edit-button");
 const alertMessage = document.getElementById("alert-message");
 const deleteAllButton = document.getElementById("delete-all-button");
 const filterButtons = document.querySelectorAll(".filter-todos");
+const notificationToggle = document.getElementById("enable-notifications");
 const tBody = document.querySelector("tbody");
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
@@ -35,18 +36,60 @@ const displayTodos = (filteredTodos = todos) => {
   }
 
   tBody.innerHTML = "";
+  const today = moment().locale("fa").format("YYYY/MM/DD");
+
+  filteredTodos.sort((a, b) => {
+    const dateA = a.date
+      ? moment(persianToEnglishNumbers(a.date), "YYYY/MM/DD")
+      : null;
+    const dateB = b.date
+      ? moment(persianToEnglishNumbers(b.date), "YYYY/MM/DD")
+      : null;
+
+    if (!dateA) return 1; // اگر `dateA` خالی باشد، آن را به انتهای لیست ببرد
+    if (!dateB) return -1; // اگر `dateB` خالی باشد، `dateA` قبل از `dateB` قرار بگیرد
+
+    return dateA - dateB; // مرتب‌سازی بر اساس تاریخ
+  });
+
   filteredTodos.forEach((todo) => {
+    const taskDate = persianToEnglishNumbers(todo.date);
+    const momentTaskDate = moment(taskDate, "YYYY/MM/DD");
+    const momentToday = moment(today, "YYYY/MM/DD");
+    const isExpired = momentTaskDate.isBefore(momentToday);
+    const isExpiring =
+      momentTaskDate.diff(momentToday, "days") === 1 ||
+      momentTaskDate.diff(momentToday, "days") === 0;
+
+    let taskClass = "";
+    if (todo.completed) {
+      taskClass = "completed-task"; // رنگ سبز برای انجام شده‌ها
+    } else if (isExpired) {
+      taskClass = "expired-task"; // رنگ قرمز برای وظایف منقضی شده
+    } else if (isExpiring) {
+      taskClass = "warning-task"; // رنگ زرد برای وظایفی که فردا موعدشان است
+    }
+
+    let statusText = "";
+    if (todo.completed) {
+      statusText = "انجام شده";
+    } else if (isExpired) {
+      statusText = "وقت اضافه";
+    } else {
+      statusText = "در حال انجام";
+    }
+
     tBody.innerHTML += `<tr>
-  <td class="${todo.completed ? "completed-task" : ""}">
+  <td class="${taskClass}">
   ${todo.task}
   </td>
-  <td class="${todo.completed ? "completed-task" : ""}">
+  <td class="${taskClass}">
   ${todo.date || "-"}
   </td>
-  <td class="${todo.completed ? "completed-task" : ""}">
-  ${todo.completed ? "انجام شده" : "در حال انجام"}
+  <td class="${taskClass}">
+  ${statusText}
   </td>
-  <td class="${todo.completed ? "completed-task" : ""}">
+  <td class="${taskClass}">
   <button onclick="editHandler('${todo.id}')">ویرایش</button>
   <button onclick="toggleStatus('${todo.id}')">${
       todo.completed ? "ناتمام" : "تمام"
@@ -55,6 +98,10 @@ const displayTodos = (filteredTodos = todos) => {
   </td>
   </tr>`;
   });
+};
+
+const persianToEnglishNumbers = (str) => {
+  return str.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
 };
 
 const taskHandler = () => {
@@ -157,10 +204,75 @@ const filterHandler = (event) => {
   }
 };
 
+if (Notification.permission === "default") {
+  Notification.requestPermission();
+}
+
+const sendNotifications = () => {
+  if (localStorage.getItem("notificationsEnabled") !== "true") {
+    return;
+  }
+
+  // بررسی دسترسی به نوتیفیکیشن‌ها
+  if (Notification.permission !== "granted") {
+    return;
+  }
+
+  // گرفتن تاریخ فردا به شمسی
+  const tomorrow = moment().add(1, "days").locale("fa").format("YYYY/MM/DD");
+
+  // فیلتر کردن تسک‌هایی که موعدشان فرداست
+  const dueTasks = todos.filter(
+    (todo) =>
+      persianToEnglishNumbers(todo.date) === persianToEnglishNumbers(tomorrow)
+  );
+
+  if (dueTasks.length === 0) {
+    return;
+  }
+
+  // ارسال نوتیفیکیشن برای هر تسک
+  dueTasks.forEach((todo) => {
+    new Notification("⏳ یادآوری", {
+      body: `📝 ${todo.task} - موعد: ${todo.date}`,
+      icon: "./icons/icon-192x192.png",
+    });
+  });
+};
+
+
 window.addEventListener("load", (e) => displayTodos());
 addButton.addEventListener("click", taskHandler);
 editButton.addEventListener("click", applyEditHandler);
 deleteAllButton.addEventListener("click", deleteAll);
 filterButtons.forEach((button) => {
   button.addEventListener("click", filterHandler);
+});
+// هنگام بارگذاری صفحه، وضعیت نوتیفیکیشن‌ها را از localStorage بارگذاری می‌کنیم
+window.addEventListener("load", () => {
+  const isEnabled = localStorage.getItem("notificationsEnabled") === "true";
+  // وضعیت چک‌باکس را بر اساس localStorage تنظیم می‌کنیم
+  notificationToggle.checked = isEnabled;
+
+  // بررسی دسترسی نوتیفیکیشن‌ها
+  if (Notification.permission !== "granted") {
+    notificationToggle.checked = false; // اگر دسترسی رد شده باشد، تیک برداشته می‌شود
+  }
+});
+
+notificationToggle.addEventListener("change", () => {
+  if (Notification.permission !== "granted") {
+    showAlert(
+      "برای دریافت نوتیفیکیشن‌ها باید دسترسی را از مرورگر خود فعال کنید.",
+      "error"
+    );
+    notificationToggle.checked = false; // غیرفعال کردن چک‌باکس
+    return; // جلوگیری از ذخیره‌سازی در صورت عدم دسترسی
+  }
+
+  // اگر دسترسی به نوتیفیکیشن‌ها فعال باشد، وضعیت چک‌باکس را ذخیره می‌کنیم
+  localStorage.setItem("notificationsEnabled", notificationToggle.checked);
+});
+window.addEventListener("load", () => {
+  sendNotifications(); // ارسال نوتیفیکیشن هنگام ورود
 });

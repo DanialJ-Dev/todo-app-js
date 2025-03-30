@@ -204,24 +204,42 @@ const filterHandler = (event) => {
   }
 };
 
-if (Notification.permission === "default") {
-  Notification.requestPermission();
+// ثبت Service Worker برای مدیریت نوتیفیکیشن در پس‌زمینه
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").then((registration) => {
+    console.log("✅ Service Worker ثبت شد:", registration);
+  }).catch((error) => {
+    console.error("❌ ثبت Service Worker ناموفق بود:", error);
+  });
 }
 
+// درخواست دسترسی نوتیفیکیشن هنگام بارگذاری صفحه
+window.addEventListener("load", () => {
+  if (Notification.permission === "default") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("✅ دسترسی نوتیفیکیشن فعال شد.");
+      } else {
+        console.warn("⚠️ دسترسی نوتیفیکیشن رد شد.");
+      }
+    });
+  }
+
+  // ارسال نوتیفیکیشن‌های وظایف موعددار
+  sendNotifications();
+});
+
+// ارسال نوتیفیکیشن وظایف موعددار
 const sendNotifications = () => {
   if (localStorage.getItem("notificationsEnabled") !== "true") {
     return;
   }
 
-  // بررسی دسترسی به نوتیفیکیشن‌ها
   if (Notification.permission !== "granted") {
     return;
   }
 
-  // گرفتن تاریخ فردا به شمسی
   const tomorrow = moment().add(1, "days").locale("fa").format("YYYY/MM/DD");
-
-  // فیلتر کردن تسک‌هایی که موعدشان فرداست
   const dueTasks = todos.filter(
     (todo) =>
       persianToEnglishNumbers(todo.date) === persianToEnglishNumbers(tomorrow)
@@ -231,14 +249,16 @@ const sendNotifications = () => {
     return;
   }
 
-  // ارسال نوتیفیکیشن برای هر تسک
   dueTasks.forEach((todo) => {
-    new Notification("⏳ یادآوری", {
-      body: `📝 ${todo.task} - موعد: ${todo.date}`,
-      icon: "./icons/icon-192x192.png",
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification("📌 یادآوری وظیفه", {
+        body: `📝 ${todo.task} - موعد: ${todo.date}`,
+        icon: "./icons/icon-192x192.png",
+      });
     });
   });
 };
+
 
 
 window.addEventListener("load", (e) => displayTodos());
@@ -272,7 +292,4 @@ notificationToggle.addEventListener("change", () => {
 
   // اگر دسترسی به نوتیفیکیشن‌ها فعال باشد، وضعیت چک‌باکس را ذخیره می‌کنیم
   localStorage.setItem("notificationsEnabled", notificationToggle.checked);
-});
-window.addEventListener("load", () => {
-  sendNotifications(); // ارسال نوتیفیکیشن هنگام ورود
 });

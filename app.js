@@ -2,6 +2,7 @@ const taskInput = document.getElementById("task-input");
 const dateInput = document.getElementById("date-input");
 const addButton = document.getElementById("add-button");
 const editButton = document.getElementById("edit-button");
+const clearDateButton = document.getElementById("clear-date-button");
 const alertMessage = document.getElementById("alert-message");
 const deleteAllButton = document.getElementById("delete-all-button");
 const filterButtons = document.querySelectorAll(".filter-todos");
@@ -28,6 +29,34 @@ const showAlert = (message, type) => {
     alert.style.display = "none";
   }, 2000);
 };
+
+const requestNotificationPermission = () => {
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      localStorage.setItem("notificationsEnabled", "true");
+      notificationToggle.checked = true;
+      showAlert("دسترسی نوتیفیکیشن فعال شد.", "success");
+    } else {
+      localStorage.setItem("notificationsEnabled", "false");
+      notificationToggle.checked = false;
+      showAlert("دسترسی نوتیفیکیشن رد شد.", "error");
+    }
+  });
+};
+
+notificationToggle.addEventListener("change", () => {
+  if (Notification.permission === "default") {
+    requestNotificationPermission();
+  } else if (Notification.permission !== "granted") {
+    showAlert(
+      "برای دریافت نوتیفیکیشن‌ها باید دسترسی را از مرورگر خود فعال کنید.",
+      "error"
+    );
+    notificationToggle.checked = false;
+  } else {
+    localStorage.setItem("notificationsEnabled", notificationToggle.checked);
+  }
+});
 
 const displayTodos = (filteredTodos = todos) => {
   if (!filteredTodos.length) {
@@ -190,6 +219,15 @@ const applyEditHandler = (event) => {
   showAlert("وظیفه با موفقیت ویرایش پیدا کرد.", "success");
 };
 
+// if (dateInput.value) {
+//   clearDateButton.style.display = "inline-block";
+//   const clearDateHandler = () => {
+//     dateInput.value = "";
+//     clearDateButton.style.display = "none";
+//   };
+//   clearDateButton.addEventListener("click", clearDateHandler);
+// }
+
 const filterHandler = (event) => {
   let filteredTodos = null;
   const filter = event.target.dataset.filter;
@@ -206,11 +244,14 @@ const filterHandler = (event) => {
 
 // ثبت Service Worker برای مدیریت نوتیفیکیشن در پس‌زمینه
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js").then((registration) => {
-    console.log("✅ Service Worker ثبت شد:", registration);
-  }).catch((error) => {
-    console.error("❌ ثبت Service Worker ناموفق بود:", error);
-  });
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then((registration) => {
+      console.log("✅ Service Worker ثبت شد:", registration);
+    })
+    .catch((error) => {
+      console.error("❌ ثبت Service Worker ناموفق بود:", error);
+    });
 }
 
 // درخواست دسترسی نوتیفیکیشن هنگام بارگذاری صفحه
@@ -259,11 +300,10 @@ const sendNotifications = () => {
   });
 };
 
-
-
 window.addEventListener("load", (e) => displayTodos());
 addButton.addEventListener("click", taskHandler);
 editButton.addEventListener("click", applyEditHandler);
+
 deleteAllButton.addEventListener("click", deleteAll);
 filterButtons.forEach((button) => {
   button.addEventListener("click", filterHandler);
@@ -293,3 +333,30 @@ notificationToggle.addEventListener("change", () => {
   // اگر دسترسی به نوتیفیکیشن‌ها فعال باشد، وضعیت چک‌باکس را ذخیره می‌کنیم
   localStorage.setItem("notificationsEnabled", notificationToggle.checked);
 });
+
+function updateClearDateButton() {
+  const value = dateInput.value.trim();
+  clearDateButton.style.display = value ? "inline-block" : "none";
+}
+
+// وقتی کاربر دستی چیزی وارد یا پاک کنه
+dateInput.addEventListener("input", updateClearDateButton);
+dateInput.addEventListener("change", updateClearDateButton);
+
+// دکمه "حذف تاریخ"
+clearDateButton.addEventListener("click", () => {
+  dateInput.value = "";
+  updateClearDateButton();
+});
+
+// چون persian-datepicker مقدار رو با JS تغییر می‌ده، باید با observer گوش بدیم
+const observer = new MutationObserver(updateClearDateButton);
+observer.observe(dateInput, { attributes: true, attributeFilter: ['value'] });
+
+// یا اگر جواب نداد (بسته به تقویم)، هر نیم‌ثانیه چک کن:
+setInterval(updateClearDateButton, 300);
+
+// بار اول هم چک کن
+updateClearDateButton();
+
+

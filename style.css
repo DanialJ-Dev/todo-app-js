@@ -302,10 +302,10 @@ td button:nth-child(3) {
   #edit-button {
     width: 20%;
   }
-  #clear-date-button{
+   #clear-date-button {
     padding: 2px;
-    width: 20%;
-    font-size: 0.5rem;
+    width: 25%;
+    font-size: 0.55rem;
   }
 
   tbody td button {

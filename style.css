@@ -275,6 +275,7 @@ td button:nth-child(3) {
   width: 15%;
 }
 #clear-date-button{
+  display: none;
   width: 20%;
   margin-left: 5px;
 }

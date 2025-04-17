@@ -254,22 +254,6 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-// درخواست دسترسی نوتیفیکیشن هنگام بارگذاری صفحه
-// window.addEventListener("load", () => {
-//   if (Notification.permission === "default") {
-//     Notification.requestPermission().then((permission) => {
-//       if (permission === "granted") {
-//         console.log("✅ دسترسی نوتیفیکیشن فعال شد.");
-//       } else {
-//         console.warn("⚠️ دسترسی نوتیفیکیشن رد شد.");
-//       }
-//     });
-//   }
-
-//   // ارسال نوتیفیکیشن‌های وظایف موعددار
-//   sendNotifications();
-// });
-
 // ارسال نوتیفیکیشن وظایف موعددار
 const sendNotifications = () => {
   if (localStorage.getItem("notificationsEnabled") !== "true") {
@@ -300,6 +284,10 @@ const sendNotifications = () => {
   });
 };
 
+window.addEventListener("load", () => {
+  // ارسال نوتیفیکیشن‌های وظایف موعددار
+  sendNotifications();
+});
 window.addEventListener("load", (e) => displayTodos());
 addButton.addEventListener("click", taskHandler);
 editButton.addEventListener("click", applyEditHandler);

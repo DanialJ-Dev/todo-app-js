@@ -255,20 +255,20 @@ if ("serviceWorker" in navigator) {
 }
 
 // درخواست دسترسی نوتیفیکیشن هنگام بارگذاری صفحه
-window.addEventListener("load", () => {
-  if (Notification.permission === "default") {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.log("✅ دسترسی نوتیفیکیشن فعال شد.");
-      } else {
-        console.warn("⚠️ دسترسی نوتیفیکیشن رد شد.");
-      }
-    });
-  }
+// window.addEventListener("load", () => {
+//   if (Notification.permission === "default") {
+//     Notification.requestPermission().then((permission) => {
+//       if (permission === "granted") {
+//         console.log("✅ دسترسی نوتیفیکیشن فعال شد.");
+//       } else {
+//         console.warn("⚠️ دسترسی نوتیفیکیشن رد شد.");
+//       }
+//     });
+//   }
 
-  // ارسال نوتیفیکیشن‌های وظایف موعددار
-  sendNotifications();
-});
+//   // ارسال نوتیفیکیشن‌های وظایف موعددار
+//   sendNotifications();
+// });
 
 // ارسال نوتیفیکیشن وظایف موعددار
 const sendNotifications = () => {
@@ -293,7 +293,7 @@ const sendNotifications = () => {
   dueTasks.forEach((todo) => {
     navigator.serviceWorker.ready.then((registration) => {
       registration.showNotification("📌 یادآوری وظیفه", {
-        body: `📝 ${todo.task} - موعد: ${todo.date}`,
+        body: `📝 ${todo.task}\n 📅 موعد: ${todo.date}`,
         icon: "./icons/icon-192x192.png",
       });
     });
@@ -323,8 +323,8 @@ window.addEventListener("load", () => {
 notificationToggle.addEventListener("change", () => {
   if (Notification.permission !== "granted") {
     showAlert(
-      "برای دریافت نوتیفیکیشن‌ها باید دسترسی را از مرورگر خود فعال کنید.",
-      "error"
+      "برای دریافت نوتیفیکیشن‌ها دسترسی را از مرورگر خود فعال کنید.",
+      "notif"
     );
     notificationToggle.checked = false; // غیرفعال کردن چک‌باکس
     return; // جلوگیری از ذخیره‌سازی در صورت عدم دسترسی
@@ -354,7 +354,7 @@ const observer = new MutationObserver(updateClearDateButton);
 observer.observe(dateInput, { attributes: true, attributeFilter: ['value'] });
 
 // یا اگر جواب نداد (بسته به تقویم)، هر نیم‌ثانیه چک کن:
-setInterval(updateClearDateButton, 300);
+setInterval(updateClearDateButton, 250);
 
 // بار اول هم چک کن
 updateClearDateButton();

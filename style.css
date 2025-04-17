@@ -5,6 +5,7 @@
   --color-success: #36d39a;
   --color-warning: #fbbe23;
   --color-error: #f87171;
+  --color-notif: #24a0ed;
 }
 
 @font-face {
@@ -115,7 +116,7 @@ button:hover {
   color: #fafafa;
 }
 
-.notification-toggle{
+.notification-toggle {
   text-align: center;
 }
 
@@ -150,7 +151,7 @@ button:hover {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 24px;
 }
 
@@ -162,7 +163,7 @@ button:hover {
   left: 3px;
   bottom: 3px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
@@ -173,7 +174,6 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(20px);
 }
-
 
 table {
   width: 100%;
@@ -233,7 +233,7 @@ td button:nth-child(3) {
   background-color: #f8d7da;
 }
 
-.expiring-task{
+.expiring-task {
   background-color: #ede58a;
 }
 
@@ -256,12 +256,20 @@ td button:nth-child(3) {
 }
 
 .alert-success {
+  color: #fafafa;
   background-color: var(--color-success);
   text-align: center;
 }
 
 .alert-error {
+  color: #fafafa;
   background-color: var(--color-error);
+  text-align: center;
+}
+
+.alert-notif {
+  color: #fafafa;
+  background-color: var(--color-notif);
   text-align: center;
 }
 
@@ -274,7 +282,7 @@ td button:nth-child(3) {
   color: #000000;
   width: 15%;
 }
-#clear-date-button{
+#clear-date-button {
   display: none;
   width: 20%;
   margin-left: 5px;
@@ -302,7 +310,7 @@ td button:nth-child(3) {
   #edit-button {
     width: 20%;
   }
-   #clear-date-button {
+  #clear-date-button {
     padding: 2px;
     width: 25%;
     font-size: 0.55rem;

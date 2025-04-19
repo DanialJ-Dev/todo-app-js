@@ -267,7 +267,8 @@ const sendNotifications = () => {
   const tomorrow = moment().add(1, "days").locale("fa").format("YYYY/MM/DD");
   const dueTasks = todos.filter(
     (todo) =>
-      persianToEnglishNumbers(todo.date) === persianToEnglishNumbers(tomorrow)
+      persianToEnglishNumbers(todo.date) ===
+        persianToEnglishNumbers(tomorrow) && todo.completed === false
   );
 
   if (dueTasks.length === 0) {
@@ -339,12 +340,10 @@ clearDateButton.addEventListener("click", () => {
 
 // چون persian-datepicker مقدار رو با JS تغییر می‌ده، باید با observer گوش بدیم
 const observer = new MutationObserver(updateClearDateButton);
-observer.observe(dateInput, { attributes: true, attributeFilter: ['value'] });
+observer.observe(dateInput, { attributes: true, attributeFilter: ["value"] });
 
 // یا اگر جواب نداد (بسته به تقویم)، هر نیم‌ثانیه چک کن:
 setInterval(updateClearDateButton, 250);
 
 // بار اول هم چک کن
 updateClearDateButton();
-
-

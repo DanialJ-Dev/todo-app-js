@@ -74,7 +74,6 @@ h2 {
 }
 
 .input-section input {
-  margin-left: 10px;
   width: 100%;
   border: var(--color-primary) 1px solid;
   border-radius: 5px;
@@ -276,44 +275,87 @@ td button:nth-child(3) {
 #edit-button {
   color: #000000;
   display: none;
-  width: 15%;
 }
 #add-button {
   color: #000000;
-  width: 15%;
 }
-#clear-date-button {
-  display: none;
+
+.button-wrapper {
   width: 20%;
-  margin-left: 5px;
+  position: relative;
+}
+#add-button,
+#edit-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#date-input,
+#task-input {
+  width: 100%;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.wrapper input {
+  /* width: 100%; */
+  height: 100%;
+  padding-left: 30px;
+}
+
+.clear-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: none;
+  z-index: 10;
+}
+
+.clear-icon:hover {
+  color: red;
 }
 
 @media (max-width: 480px) {
   body {
     font-size: 0.7rem;
   }
+
   .input-section input {
     font-size: 0.7rem;
-    margin-left: 5px;
     width: 50%;
-    padding: 5px;
+    height: 100%;
+    padding: 7px;
+  }
+
+  .wrapper {
+    margin-left: 5px;
+    height: 100%;
   }
 
   .filter-todos,
   #delete-all-button,
   #add-button,
   #edit-button {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
   }
 
-  #add-button,
-  #edit-button {
-    width: 20%;
+  .button-wrapper {
+    width: 45%;
   }
-  #clear-date-button {
-    padding: 2px;
-    width: 25%;
-    font-size: 0.55rem;
+
+  .clear-icon {
+    font-size: 1.1rem;
+    left: 8px;
   }
 
   tbody td button {

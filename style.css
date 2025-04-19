@@ -369,3 +369,9 @@ td button:nth-child(3) {
     width: 46.58px;
   }
 }
+
+@media (max-width: 768px) {
+  .button-wrapper {
+    width: 35%;
+  }
+}

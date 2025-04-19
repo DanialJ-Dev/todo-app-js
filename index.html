@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1"
     />
     <title>ToDo App</title>
-    <link rel="icon" href="./icons/icon-192x192.png">
+    <link rel="icon" href="./icons/icon-192x192.png" />
     <link rel="stylesheet" href="./style.css" />
     <link
       rel="stylesheet"
@@ -19,20 +19,27 @@
     <div class="container">
       <h2>لیست وظایف</h2>
       <div class="input-section">
-        <input
-          type="text"
-          placeholder="وظیفه خود را بنویسید..."
-          id="task-input"
-        />
-        <input
-          type="text"
-          id="date-input"
-          placeholder="تاریخ را انتخاب کنید..."
-        />
-
-        <button id="clear-date-button">حذف تاریخ</button>
-        <button id="add-button">اضافه</button>
-        <button id="edit-button">ویرایش</button>
+        <div class="wrapper">
+          <input
+            type="text"
+            placeholder="وظیفه خود را بنویسید..."
+            id="task-input"
+          />
+        </div>
+        <div class="wrapper">
+          <input
+            type="text"
+            id="date-input"
+            placeholder="تاریخ را انتخاب کنید..."
+          />
+          <span id="clear-date-button" class="clear-icon" title="حذف تاریخ"
+            >×</span
+          >
+        </div>
+        <div class="button-wrapper">
+          <button id="add-button">اضافه</button>
+          <button id="edit-button">ویرایش</button>
+        </div>
       </div>
       <div class="todo-operators">
         <div>

@@ -69,17 +69,18 @@ const displayTodos = (filteredTodos = todos) => {
 
   filteredTodos.sort((a, b) => {
     const dateA = a.date
-      ? moment(persianToEnglishNumbers(a.date), "YYYY/MM/DD")
+      ? moment.from(persianToEnglishNumbers(a.date), 'fa', 'YYYYMMDD')
       : null;
     const dateB = b.date
-      ? moment(persianToEnglishNumbers(b.date), "YYYY/MM/DD")
+      ? moment.from(persianToEnglishNumbers(b.date), 'fa', 'YYYYMMDD')
       : null;
 
-    if (!dateA) return 1; // اگر `dateA` خالی باشد، آن را به انتهای لیست ببرد
-    if (!dateB) return -1; // اگر `dateB` خالی باشد، `dateA` قبل از `dateB` قرار بگیرد
-
-    return dateA - dateB; // مرتب‌سازی بر اساس تاریخ
+    if (!dateA) return 1;
+    if (!dateB) return -1;
+  
+    return dateA.toDate() - dateB.toDate(); // تاریخ‌ها رو به JS Date تبدیل کن
   });
+  
 
   filteredTodos.forEach((todo) => {
     const taskDate = persianToEnglishNumbers(todo.date);

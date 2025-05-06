@@ -13,9 +13,40 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/css/persian-datepicker.min.css"
     />
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css" />
     <link rel="manifest" href="manifest.json" />
   </head>
   <body>
+    <!-- دکمه منوی همبرگری -->
+    <div class="hamburger-menu">
+      <button id="hamburgerBtn" aria-label="Menu">☰</button>
+      <div id="menuOptions" class="menu-options">
+        <div class="toggle-container">
+          <span>حالت تاریک</span>
+          <label class="switch">
+            <input type="checkbox" id="darkModeToggle" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="toggle-container">
+          <span>نوتیفیکیشن‌ها</span>
+          <label class="switch">
+            <input type="checkbox" id="notificationToggle" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="toggle-container">
+          <span id="open-about">درباره</span>
+        </div>
+
+        <div class="toggle-container">
+          <span id="open-contact">تماس با ما</span>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <h2>لیست وظایف</h2>
       <div class="input-section">
@@ -54,14 +85,31 @@
         <button id="delete-all-button">حذف همه</button>
       </div>
     </div>
-    <div class="notification-toggle">
-      <div class="toggle-container">
-        <span>نوتیفیکیشن‌ها</span>
-        <label class="switch">
-          <input type="checkbox" id="enable-notifications" />
-          <span class="slider round"></span>
-        </label>
-      </div>
+    <div class="button-container">
+      <button title="حالت تاریک"
+        id="toggle-dark-mode"
+        style="position: fixed; bottom: 190px; left: 10px"
+      >
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button title="نوتیفیکیشن‌ها"
+        id="toggle-notification"
+        style="position: fixed; bottom: 130px; left: 10px"
+      >
+        <i class="fa-solid fa-bell"></i>
+      </button>
+      <button title="درباره"
+      id="info"
+      style="position: fixed; bottom: 70px; left: 10px"
+    >
+      <i class="fa-solid fa-info"></i>
+    </button>
+    <button title="تماس با ما"
+      id="contact"
+      style="position: fixed; bottom: 10px; left: 10px"
+    >
+      <i class="fa-solid fa-envelope"></i>
+    </button>
     </div>
 
     <div class="alert" id="alert-message"></div>
@@ -77,6 +125,12 @@
         </thead>
         <tbody></tbody>
       </table>
+    </div>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modal-body"></div>
+      </div>
     </div>
     <script src="https://unpkg.com/jalali-moment@3.3.10/dist/jalali-moment.browser.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>

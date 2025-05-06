@@ -6,57 +6,26 @@ const clearDateButton = document.getElementById("clear-date-button");
 const alertMessage = document.getElementById("alert-message");
 const deleteAllButton = document.getElementById("delete-all-button");
 const filterButtons = document.querySelectorAll(".filter-todos");
-const notificationToggle = document.getElementById("enable-notifications");
 const tBody = document.querySelector("tbody");
+const notifButton = document.getElementById("toggle-notification");
+const notifIcon = notifButton.querySelector("i");
+const darkModeButton = document.getElementById("toggle-dark-mode");
+const icon = darkModeButton.querySelector("i");
+
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const generateId = () => {
-  const id = Math.round(
-    Math.random() * Math.random() * Math.pow(10, 15)
-  ).toString();
-  return id;
+  return Math.round(Math.random() * Math.random() * Math.pow(10, 15)).toString();
 };
 
 const showAlert = (message, type) => {
   alertMessage.innerHTML = "";
   const alert = document.createElement("p");
   alert.innerText = message;
-  alert.classList.add("alert");
-  alert.classList.add(`alert-${type}`);
+  alert.classList.add("alert", `alert-${type}`);
   alertMessage.append(alert);
-
-  setTimeout(() => {
-    alert.style.display = "none";
-  }, 2000);
+  setTimeout(() => alert.style.display = "none", 2000);
 };
-
-const requestNotificationPermission = () => {
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      localStorage.setItem("notificationsEnabled", "true");
-      notificationToggle.checked = true;
-      showAlert("دسترسی نوتیفیکیشن فعال شد.", "success");
-    } else {
-      localStorage.setItem("notificationsEnabled", "false");
-      notificationToggle.checked = false;
-      showAlert("دسترسی نوتیفیکیشن رد شد.", "error");
-    }
-  });
-};
-
-notificationToggle.addEventListener("change", () => {
-  if (Notification.permission === "default") {
-    requestNotificationPermission();
-  } else if (Notification.permission !== "granted") {
-    showAlert(
-      "برای دریافت نوتیفیکیشن‌ها باید دسترسی را از مرورگر خود فعال کنید.",
-      "error"
-    );
-    notificationToggle.checked = false;
-  } else {
-    localStorage.setItem("notificationsEnabled", notificationToggle.checked);
-  }
-});
 
 const displayTodos = (filteredTodos = todos) => {
   if (!filteredTodos.length) {
@@ -68,65 +37,42 @@ const displayTodos = (filteredTodos = todos) => {
   const today = moment().locale("fa").format("YYYY/MM/DD");
 
   filteredTodos.sort((a, b) => {
-    const dateA = a.date
-      ? moment.from(persianToEnglishNumbers(a.date), 'fa', 'YYYYMMDD')
-      : null;
-    const dateB = b.date
-      ? moment.from(persianToEnglishNumbers(b.date), 'fa', 'YYYYMMDD')
-      : null;
-
+    const dateA = a.date ? moment.from(persianToEnglishNumbers(a.date), "fa", "YYYYMMDD") : null;
+    const dateB = b.date ? moment.from(persianToEnglishNumbers(b.date), "fa", "YYYYMMDD") : null;
     if (!dateA) return 1;
     if (!dateB) return -1;
-  
-    return dateA.toDate() - dateB.toDate(); // تاریخ‌ها رو به JS Date تبدیل کن
+    return dateA.toDate() - dateB.toDate();
   });
-  
 
   filteredTodos.forEach((todo) => {
     const taskDate = persianToEnglishNumbers(todo.date);
     const momentTaskDate = moment(taskDate, "YYYY/MM/DD");
     const momentToday = moment(today, "YYYY/MM/DD");
     const isExpired = momentTaskDate.isBefore(momentToday);
-    const isExpiring =
-      momentTaskDate.diff(momentToday, "days") === 1 ||
-      momentTaskDate.diff(momentToday, "days") === 0;
+    const isExpiring = [0, 1].includes(momentTaskDate.diff(momentToday, "days"));
 
     let taskClass = "";
-    if (todo.completed) {
-      taskClass = "completed-task"; // رنگ سبز برای انجام شده‌ها
-    } else if (isExpired) {
-      taskClass = "expired-task"; // رنگ قرمز برای وظایف منقضی شده
-    } else if (isExpiring) {
-      taskClass = "warning-task"; // رنگ زرد برای وظایفی که فردا موعدشان است
-    }
+    const isDarkMode = document.body.classList.contains("dark-mode");
 
-    let statusText = "";
-    if (todo.completed) {
-      statusText = "انجام شده";
-    } else if (isExpired) {
-      statusText = "وقت اضافه";
-    } else {
-      statusText = "در حال انجام";
-    }
+    if (todo.completed) taskClass = "completed-task";
+    else if (isExpired) taskClass = "expired-task";
+    else if (isExpiring) taskClass = "warning-task";
 
-    tBody.innerHTML += `<tr>
-  <td class="${taskClass}">
-  ${todo.task}
-  </td>
-  <td class="${taskClass}">
-  ${todo.date || "-"}
-  </td>
-  <td class="${taskClass}">
-  ${statusText}
-  </td>
-  <td class="${taskClass}">
-  <button onclick="editHandler('${todo.id}')">ویرایش</button>
-  <button onclick="toggleStatus('${todo.id}')">${
-      todo.completed ? "ناتمام" : "تمام"
-    }</button>
-  <button onclick="deleteHandler('${todo.id}')">حذف</button>
-  </td>
-  </tr>`;
+    if (isDarkMode && taskClass) taskClass += " dark-mode";
+
+    const statusText = todo.completed ? "انجام شده" : isExpired ? "وقت اضافه" : "در حال انجام";
+
+    tBody.innerHTML += `
+      <tr>
+        <td class="${taskClass}">${todo.task}</td>
+        <td class="${taskClass}">${todo.date || "-"}</td>
+        <td class="${taskClass}">${statusText}</td>
+        <td class="${taskClass}">
+          <button onclick="editHandler('${todo.id}')">ویرایش</button>
+          <button onclick="toggleStatus('${todo.id}')">${todo.completed ? "ناتمام" : "تمام"}</button>
+          <button onclick="deleteHandler('${todo.id}')">حذف</button>
+        </td>
+      </tr>`;
   });
 };
 
@@ -137,12 +83,8 @@ const persianToEnglishNumbers = (str) => {
 const taskHandler = () => {
   const task = taskInput.value;
   const date = dateInput.value;
-  const todo = {
-    id: generateId(),
-    task: task,
-    date: date,
-    completed: false,
-  };
+  const todo = { id: generateId(), task, date, completed: false };
+
   if (task) {
     todos.push(todo);
     displayTodos();
@@ -181,8 +123,7 @@ const deleteAll = () => {
 };
 
 const deleteHandler = (id) => {
-  const newTodos = todos.filter((todo) => todo.id !== id);
-  todos = newTodos;
+  todos = todos.filter((todo) => todo.id !== id);
   saveInLocalStorage();
   displayTodos();
   showAlert("وظیفه با موفقیت حذف شد.", "success");
@@ -209,72 +150,45 @@ const editHandler = (id) => {
 const applyEditHandler = (event) => {
   const id = event.target.dataset.id;
   const todo = todos.find((todo) => todo.id === id);
+  if(!taskInput.value){
+    showAlert("لطفا یک وظیفه وارد کنید.", "error");
+    return;
+  }
+  else{
   todo.task = taskInput.value;
   todo.date = dateInput.value;
   taskInput.value = "";
   dateInput.value = "";
   editButton.style.display = "none";
-  addButton.style.display = "inline-block";
+  addButton.style.display = "inline-block";}
   saveInLocalStorage();
   displayTodos();
   showAlert("وظیفه با موفقیت ویرایش پیدا کرد.", "success");
 };
 
-// if (dateInput.value) {
-//   clearDateButton.style.display = "inline-block";
-//   const clearDateHandler = () => {
-//     dateInput.value = "";
-//     clearDateButton.style.display = "none";
-//   };
-//   clearDateButton.addEventListener("click", clearDateHandler);
-// }
-
 const filterHandler = (event) => {
-  let filteredTodos = null;
   const filter = event.target.dataset.filter;
-  if (filter === "all") {
-    displayTodos();
-  } else if (filter === "pending") {
-    filteredTodos = todos.filter((todo) => todo.completed === false);
-    displayTodos(filteredTodos);
-  } else if (filter === "completed") {
-    filteredTodos = todos.filter((todo) => todo.completed === true);
-    displayTodos(filteredTodos);
-  }
+  if (filter === "all") return displayTodos();
+  const filteredTodos = todos.filter((todo) => todo.completed === (filter === "completed"));
+  displayTodos(filteredTodos);
 };
 
-// ثبت Service Worker برای مدیریت نوتیفیکیشن در پس‌زمینه
+// Service Worker
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("./sw.js")
-    .then((registration) => {
-      console.log("✅ Service Worker ثبت شد:", registration);
-    })
-    .catch((error) => {
-      console.error("❌ ثبت Service Worker ناموفق بود:", error);
-    });
+  navigator.serviceWorker.register("./sw.js")
+    .then((registration) => console.log("✅ Service Worker ثبت شد:", registration))
+    .catch((error) => console.error("❌ ثبت Service Worker ناموفق بود:", error));
 }
 
-// ارسال نوتیفیکیشن وظایف موعددار
 const sendNotifications = () => {
-  if (localStorage.getItem("notificationsEnabled") !== "true") {
-    return;
-  }
-
-  if (Notification.permission !== "granted") {
-    return;
-  }
+  if (localStorage.getItem("notificationsEnabled") !== "true") return;
+  if (Notification.permission !== "granted") return;
 
   const tomorrow = moment().add(1, "days").locale("fa").format("YYYY/MM/DD");
-  const dueTasks = todos.filter(
-    (todo) =>
-      persianToEnglishNumbers(todo.date) ===
-        persianToEnglishNumbers(tomorrow) && todo.completed === false
+  const dueTasks = todos.filter((todo) =>
+    persianToEnglishNumbers(todo.date) === persianToEnglishNumbers(tomorrow) &&
+    !todo.completed
   );
-
-  if (dueTasks.length === 0) {
-    return;
-  }
 
   dueTasks.forEach((todo) => {
     navigator.serviceWorker.ready.then((registration) => {
@@ -286,65 +200,196 @@ const sendNotifications = () => {
   });
 };
 
+// Load
 window.addEventListener("load", () => {
-  // ارسال نوتیفیکیشن‌های وظایف موعددار
+  displayTodos();
   sendNotifications();
+  updateNotifIcon();
 });
-window.addEventListener("load", (e) => displayTodos());
+
 addButton.addEventListener("click", taskHandler);
 editButton.addEventListener("click", applyEditHandler);
-
 deleteAllButton.addEventListener("click", deleteAll);
-filterButtons.forEach((button) => {
-  button.addEventListener("click", filterHandler);
-});
-// هنگام بارگذاری صفحه، وضعیت نوتیفیکیشن‌ها را از localStorage بارگذاری می‌کنیم
-window.addEventListener("load", () => {
-  const isEnabled = localStorage.getItem("notificationsEnabled") === "true";
-  // وضعیت چک‌باکس را بر اساس localStorage تنظیم می‌کنیم
-  notificationToggle.checked = isEnabled;
+filterButtons.forEach((button) => button.addEventListener("click", filterHandler));
 
-  // بررسی دسترسی نوتیفیکیشن‌ها
-  if (Notification.permission !== "granted") {
-    notificationToggle.checked = false; // اگر دسترسی رد شده باشد، تیک برداشته می‌شود
-  }
-});
-
-notificationToggle.addEventListener("change", () => {
-  if (Notification.permission !== "granted") {
-    showAlert(
-      "برای دریافت نوتیفیکیشن‌ها دسترسی را از مرورگر خود فعال کنید.",
-      "notif"
-    );
-    notificationToggle.checked = false; // غیرفعال کردن چک‌باکس
-    return; // جلوگیری از ذخیره‌سازی در صورت عدم دسترسی
-  }
-
-  // اگر دسترسی به نوتیفیکیشن‌ها فعال باشد، وضعیت چک‌باکس را ذخیره می‌کنیم
-  localStorage.setItem("notificationsEnabled", notificationToggle.checked);
-});
-
+// تاریخ
 function updateClearDateButton() {
-  const value = dateInput.value.trim();
-  clearDateButton.style.display = value ? "inline-block" : "none";
+  clearDateButton.style.display = dateInput.value.trim() ? "inline-block" : "none";
 }
-
-// وقتی کاربر دستی چیزی وارد یا پاک کنه
 dateInput.addEventListener("input", updateClearDateButton);
 dateInput.addEventListener("change", updateClearDateButton);
-
-// دکمه "حذف تاریخ"
 clearDateButton.addEventListener("click", () => {
   dateInput.value = "";
   updateClearDateButton();
 });
-
-// چون persian-datepicker مقدار رو با JS تغییر می‌ده، باید با observer گوش بدیم
 const observer = new MutationObserver(updateClearDateButton);
 observer.observe(dateInput, { attributes: true, attributeFilter: ["value"] });
-
-// یا اگر جواب نداد (بسته به تقویم)، هر نیم‌ثانیه چک کن:
 setInterval(updateClearDateButton, 250);
-
-// بار اول هم چک کن
 updateClearDateButton();
+
+// دارک مود
+const updateIcon = () => {
+  icon.className = document.body.classList.contains("dark-mode")
+    ? "fa-solid fa-sun"
+    : "fa-solid fa-moon";
+};
+const toggleDarkMode = () => {
+  document.body.classList.toggle("dark-mode");
+  localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+  updateIcon();
+  displayTodos();
+};
+const loadTheme = () => {
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+  }
+  updateIcon();
+};
+darkModeButton.addEventListener("click", toggleDarkMode);
+loadTheme();
+
+// نوتیفیکیشن
+const updateNotifIcon = () => {
+  const enabled = localStorage.getItem("notificationsEnabled") === "true";
+  notifIcon.className = enabled ? "fa-solid fa-bell" : "fa-regular fa-bell-slash";
+};
+const toggleNotifications = () => {
+  if (Notification.permission === "default") {
+    showAlert("برای دریافت نوتیفیکیشن باید در مرورگر اجازه دهید.", "notif");
+    Notification.requestPermission().then((permission) => {
+      const granted = permission === "granted";
+      localStorage.setItem("notificationsEnabled", granted);
+      showAlert(granted ? "نوتیفیکیشن فعال شد." : "اجازه‌ی نوتیفیکیشن رد شد.", granted ? "success" : "error");
+      updateNotifIcon();
+    });
+  } else if (Notification.permission === "granted") {
+    const current = localStorage.getItem("notificationsEnabled") === "true";
+    localStorage.setItem("notificationsEnabled", !current);
+    updateNotifIcon();
+    showAlert(!current ? "نوتیفیکیشن‌ها فعال شدند." : "نوتیفیکیشن‌ها غیرفعال شدند.", "success");
+  } else {
+    showAlert("برای دریافت نوتیفیکیشن باید در مرورگر اجازه دهید.", "notif");
+  }
+};
+notifButton.addEventListener("click", toggleNotifications);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const menuOptions = document.getElementById('menuOptions');
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const notificationToggle = document.getElementById('notificationToggle');
+  
+
+  // نمایش/پنهان کردن منو
+  hamburgerBtn.addEventListener('click', () => {
+    menuOptions.classList.toggle('show');
+  });
+  document.addEventListener('click', (e) => {
+    const modal = document.getElementById('modal'); // اضافه شده
+  
+    if (
+      !menuOptions.contains(e.target) &&
+      !hamburgerBtn.contains(e.target) &&
+      (!modal || !modal.contains(e.target)) // بررسی که کلیک داخل modal نباشه
+    ) {
+      menuOptions.classList.remove('show');
+    }
+  });
+
+  // دارک مود
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.checked = true; // اسلایدر در حالت روشن قرار بگیره
+  }
+  darkModeToggle.addEventListener('change', () => {
+    toggleDarkMode();
+  });
+
+  // نوتیفیکیشن
+  const notifications = localStorage.getItem("notificationsEnabled");
+  if (notifications === "true") {
+    notificationToggle.checked = true; // اسلایدر نوتیف روشن باشه
+  }
+  notificationToggle.addEventListener('change', () => {
+    toggleNotifications();
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modal-body');
+  const closeModal = document.querySelector('.close');
+
+  const infoBtn = document.getElementById('info');
+  const contactBtn = document.getElementById('contact');
+  const aboutMenuItem = document.getElementById('open-about');
+  const contactMenuItem = document.getElementById('open-contact');
+
+  infoBtn.addEventListener('click', () => {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-info-circle"></i> درباره</h3>
+      <p>این برنامه یک ابزار ساده برای مدیریت وظایف روزانه است. با آن می‌توانید به راحتی وظیفه‌ای اضافه کنید، وضعیت آن را تغییر دهید، تاریخ مشخص کنید و در صورت نیاز آن را حذف کنید.
+<br>
+<h3>ویژگی‌ها:</h3>
+ایجاد و مدیریت وظایف
+<br>
+پشتیبانی از حالت تاریک (Dark Mode)
+<br>
+ارسال نوتیفیکیشن یادآوری
+<br>
+تنظیمات قابل شخصی‌سازی
+<br>
+رابط کاربری ساده و کاربردی
+</p>
+    `;
+    modal.style.display = 'block';
+  });
+
+  contactBtn.addEventListener('click', () => {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-envelope"></i> تماس با ما</h3>
+      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷</p>
+    `;
+    modal.style.display = 'block';
+  });
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  aboutMenuItem.addEventListener('click', () => {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-info-circle"></i> درباره</h3>
+      <p>این برنامه یک ابزار ساده برای مدیریت وظایف روزانه است. با آن می‌توانید به راحتی وظیفه‌ای اضافه کنید، وضعیت آن را تغییر دهید، تاریخ مشخص کنید و در صورت نیاز آن را حذف کنید.
+<br>
+<h3>ویژگی‌ها:</h3>
+ایجاد و مدیریت وظایف
+<br>
+پشتیبانی از حالت تاریک (Dark Mode)
+<br>
+ارسال نوتیفیکیشن یادآوری
+<br>
+تنظیمات قابل شخصی‌سازی
+<br>
+رابط کاربری ساده و کاربردی
+</p>
+    `;
+    modal.style.display = 'block';
+  });
+
+  contactMenuItem.addEventListener('click', () => {
+    modalBody.innerHTML = `
+      <h3><i class="fa-solid fa-envelope"></i> تماس با ما</h3>
+      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷</p>
+    `;
+    modal.style.display = 'block';
+  });
+});

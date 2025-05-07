@@ -443,6 +443,7 @@ body.dark-mode .toggle-container i {
 }
 
 .modal-content {
+  font-size: 1.1rem;
   background-color: #fff;
   margin: 12% auto;
   padding: 20px;
@@ -495,7 +496,7 @@ body.dark-mode .close {
   }
 
   .modal-content {
-    margin: 65% auto;
+    margin: 60% auto;
   }
 
   .container{

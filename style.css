@@ -496,7 +496,7 @@ body.dark-mode .close {
   }
 
   .modal-content {
-    margin: 60% auto;
+    margin: 55% auto;
   }
 
   .container{
@@ -554,5 +554,17 @@ body.dark-mode .close {
 @media (min-width: 481px) and (max-width: 768px) {
   .button-wrapper {
     width: 40%;
+  }
+}
+
+@media (max-width: 1125px) {
+  #hamburgerBtn{
+    display: block;
+  }
+  .button-container{
+    display: none;
+  }
+  .container{
+    margin-top: 3.5rem;
   }
 }

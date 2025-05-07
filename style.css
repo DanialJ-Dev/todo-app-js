@@ -170,7 +170,7 @@ button:hover {
 
 /* زمانی که فعال است */
 .switch input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .switch input:checked + .slider::before {
@@ -182,7 +182,6 @@ button:hover {
   background-color: #222;
   color: #eee;
 }
-
 
 table {
   width: 100%;
@@ -347,7 +346,7 @@ body.dark-mode button {
   background-color: var(--color-task);
   border-color: rgba(0, 86, 214, 0.299);
 }
-body.dark-mode button{
+body.dark-mode button {
   background-color: #24395c;
 }
 
@@ -379,7 +378,7 @@ body.dark-mode .toggle-container i {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   color: #333;
   transition: all 0.3s ease;
 }
@@ -404,7 +403,7 @@ body.dark-mode .toggle-container i {
   right: 0;
   background-color: var(--color-background);
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 15px;
   min-width: 200px;
   opacity: 0;
@@ -455,6 +454,10 @@ body.dark-mode .toggle-container i {
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.modal-content a {
+  color: #000;
+}
+
 .modal-content h3 {
   margin-top: 0;
 }
@@ -472,6 +475,10 @@ body.dark-mode .modal-content {
   color: #f1f1f1;
 }
 
+body.dark-mode .modal-content a {
+  color: #f1f1f1;
+}
+
 body.dark-mode .modal-content h3 {
   color: #f9d342;
 }
@@ -480,13 +487,18 @@ body.dark-mode .close {
   color: #f1f1f1;
 }
 
-
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-#hamburgerBtn{
+#hamburgerBtn {
   display: none;
 }
 
@@ -499,15 +511,15 @@ body.dark-mode .close {
     margin: 55% auto;
   }
 
-  .container{
+  .container {
     margin-top: 3.5rem;
   }
 
-  .button-container{
+  .button-container {
     display: none;
   }
 
-  #hamburgerBtn{
+  #hamburgerBtn {
     display: block;
   }
 
@@ -558,13 +570,13 @@ body.dark-mode .close {
 }
 
 @media (max-width: 1125px) {
-  #hamburgerBtn{
+  #hamburgerBtn {
     display: block;
   }
-  .button-container{
+  .button-container {
     display: none;
   }
-  .container{
+  .container {
     margin-top: 3.5rem;
   }
 }

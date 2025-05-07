@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <h3><i class="fa-solid fa-info-circle"></i> درباره</h3>
       <p>این برنامه یک ابزار ساده برای مدیریت وظایف روزانه است. با آن می‌توانید به راحتی وظیفه‌ای اضافه کنید، وضعیت آن را تغییر دهید، تاریخ مشخص کنید و در صورت نیاز آن را حذف کنید.
 <br>
-<h3>ویژگی‌ها:</h3>
+<h3><i class="fa-solid fa-crown"></i> ویژگی‌ها:</h3>
 ایجاد و مدیریت وظایف
 <br>
 پشتیبانی از حالت تاریک (Dark Mode)
@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
   contactBtn.addEventListener('click', () => {
     modalBody.innerHTML = `
       <h3><i class="fa-solid fa-envelope"></i> تماس با ما</h3>
-      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷</p>
+      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷<br> <i class="fa-brands fa-github"></i> گیت‌هاب: <a href="https://github.com/DanialJ-Dev/" style="color: #eee; text-decoration: none">DanialJ-Dev</a></p>
     `;
     modal.style.display = 'block';
   });
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <h3><i class="fa-solid fa-info-circle"></i> درباره</h3>
       <p>این برنامه یک ابزار ساده برای مدیریت وظایف روزانه است. با آن می‌توانید به راحتی وظیفه‌ای اضافه کنید، وضعیت آن را تغییر دهید، تاریخ مشخص کنید و در صورت نیاز آن را حذف کنید.
 <br>
-<h3>ویژگی‌ها:</h3>
+<h3><i class="fa-solid fa-crown"></i> ویژگی‌ها:</h3>
 ایجاد و مدیریت وظایف
 <br>
 پشتیبانی از حالت تاریک (Dark Mode)
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
   contactMenuItem.addEventListener('click', () => {
     modalBody.innerHTML = `
       <h3><i class="fa-solid fa-envelope"></i> تماس با ما</h3>
-      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷</p>
+      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷<br> <i class="fa-brands fa-github"></i> گیت‌هاب: <a href="https://github.com/DanialJ-Dev/" style="color: #eee; text-decoration: none">DanialJ-Dev</a></p>
     `;
     modal.style.display = 'block';
   });

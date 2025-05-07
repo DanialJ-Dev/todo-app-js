@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
   contactBtn.addEventListener('click', () => {
     modalBody.innerHTML = `
       <h3><i class="fa-solid fa-envelope"></i> تماس با ما</h3>
-      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷<br> <i class="fa-brands fa-github"></i> گیت‌هاب: <a href="https://github.com/DanialJ-Dev/" style="color: #eee; text-decoration: none">DanialJ-Dev</a></p>
+      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷<br> <i class="fa-brands fa-github"></i> گیت‌هاب: <a href="https://github.com/DanialJ-Dev/" style="text-decoration: none">DanialJ-Dev</a></p>
     `;
     modal.style.display = 'block';
   });
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
   contactMenuItem.addEventListener('click', () => {
     modalBody.innerHTML = `
       <h3><i class="fa-solid fa-envelope"></i> تماس با ما</h3>
-      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷<br> <i class="fa-brands fa-github"></i> گیت‌هاب: <a href="https://github.com/DanialJ-Dev/" style="color: #eee; text-decoration: none">DanialJ-Dev</a></p>
+      <p>👨‍💻 طراح و برنامه‌نویس: علیرضا جدید<br>📧 ایمیل: jadid568@gmail.com<br>📞 تلفن: ۰۹۳۶۲۲۹۰۹۳۷<br> <i class="fa-brands fa-github"></i> گیت‌هاب: <a href="https://github.com/DanialJ-Dev/" style="text-decoration: none">DanialJ-Dev</a></p>
     `;
     modal.style.display = 'block';
   });

@@ -323,6 +323,16 @@ td button:nth-child(3) {
   outline: none;
 }
 
+#plotId {
+  border-radius: 5px;
+}
+.datepicker-plot-area .datepicker-navigator .pwt-btn-switch,
+.datepicker-plot-area .datepicker-navigator .pwt-btn-prev,
+.datepicker-plot-area .datepicker-navigator .pwt-btn-next {
+  background-color: #f1f1f1 !important;
+  color: #333 !important;
+}
+
 body.dark-mode {
   --color-primary: #facc15;
   --color-tablehead: #1f2937;
@@ -348,6 +358,62 @@ body.dark-mode button {
 }
 body.dark-mode button {
   background-color: #24395c;
+}
+body.dark-mode #plotId {
+  background-color: #111827 !important;
+  border-radius: 5px;
+  border: 1px solid #2c2c2c;
+}
+
+body.dark-mode .datepicker-plot-area .datepicker-navigator .pwt-btn-switch,
+body.dark-mode .datepicker-plot-area .datepicker-navigator .pwt-btn-prev,
+body.dark-mode .datepicker-plot-area .datepicker-navigator .pwt-btn-next{
+  background-color: #1e293b !important;
+  color: #ccc !important;
+}
+body.dark-mode .table-days td span,
+body.dark-mode .datepicker-month-view .month-item,
+body.dark-mode .datepicker-year-view .year-item {
+  background-color: #111827 !important;
+  color: #ccc !important;
+}
+
+body.dark-mode .table-days td.disabled span,
+body.dark-mode .datepicker-month-view .month-item-disable,
+body.dark-mode .datepicker-year-view .year-item-disable {
+  background-color: #1e293b !important;
+  color: #414141 !important;
+}
+
+body.dark-mode .table-days td span.other-month {
+  color: #414141 !important;
+}
+
+body.dark-mode .datepicker-day-view .table-days td.today span {
+  background-color: #0b0b0b !important;
+  color: #ccc !important;
+}
+
+body.dark-mode .datepicker-day-view td span:hover,
+body.dark-mode .datepicker-day-view .table-days td.today span:hover,
+body.dark-mode .datepicker-month-view .month-item:hover,
+body.dark-mode .datepicker-year-view .year-item:hover {
+  background-color: #e5e5e5 !important;
+  color: #222 !important;
+}
+
+body.dark-mode .datepicker-day-view .table-days td.selected span,
+body.dark-mode .datepicker-month-view .month-item.selected,
+body.dark-mode .datepicker-year-view .year-item.selected {
+  background-color: #ccc !important;
+  color: #222 !important;
+  text-shadow: none !important;
+}
+
+body.dark-mode .datepicker-day-view .table-days td.selected span:hover,
+body.dark-mode .datepicker-month-view .month-item.selected:hover,
+body.dark-mode .datepicker-year-view .year-item.selected:hover {
+  background-color: #e5e5e5 !important;
 }
 
 body.dark-mode .container {

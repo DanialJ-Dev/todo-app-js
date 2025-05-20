@@ -313,7 +313,7 @@ td button:nth-child(3) {
 .clear-icon {
   position: absolute;
   left: 10px;
-  top: 50%;
+  top: 52%;
   transform: translateY(-50%);
   color: gray;
   font-size: 1.3rem;
